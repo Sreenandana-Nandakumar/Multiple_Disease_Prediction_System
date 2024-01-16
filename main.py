@@ -49,81 +49,118 @@ def predict_image(image, model_type):
     return prediction
 
 
-def main():
-    st.title("Multiple Disease Prediction")
+def login():
+    st.title("Login")
+    username = st.text_input("Username:")
+    password = st.text_input("Password:", type="password")
+    login_button = st.button("Login")
 
-    with st.sidebar:
-        selected = option_menu('Medical Image Classification',
-                               ['Malaria Detection', 'Pneumonia Detection', 'Brain Tumor Detection'],
-                               icons=['microscope.png', 'lungs', 'brain.png'],
-                               default_index=0)
-
-    # Malaria Detection Interface
-    if selected == 'Malaria Detection':
-        uploaded_file = st.file_uploader("Choose a cell image...", type=["jpg", "jpeg", "png"])
-
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file)
-            st.image(image, caption='Uploaded Image.', use_column_width=True)
-
-            try:
-                pred = predict_image(image, 'Malaria')
-                if pred[0][0] <= 0.5:
-                    st.success("INFECTED CELL")
-                else:
-                    st.success("UNINFECTED CELL")
-            except Exception as e:
-                st.error(f"Error making prediction: {e}")
-
-    # Pneumonia Detection Interface
-    elif selected == 'Pneumonia Detection':
-        uploaded_file = st.file_uploader("Choose an X-ray image...", type=["jpg", "jpeg", "png"])
-
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file)
-            st.image(image, caption='Uploaded X-ray Image.', use_column_width=True)
-
-            try:
-                pred = predict_image(image, 'Pneumonia')
-                pneumonia_prob = pred[0][1]
-                normal_prob = pred[0][0]
-
-                if pneumonia_prob > normal_prob:
-                    st.success("PNEUMONIA DETECTED")
-                else:
-                    st.success("PNEUMONIA NOT DETECTED")
-            except Exception as e:
-                st.error(f"Error making prediction: {e}")
-
-    # Brain Tumor Detection Interface
-    elif selected == 'Brain Tumor Detection':
-        uploaded_file = st.file_uploader("Choose a brain MRI image...", type="jpg")
-
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file)
-            st.image(image, caption='Uploaded Brain MRI Image.', use_column_width=True)
-
-            try:
-                pred = predict_image(image, 'Brain Tumor')
-                if np.argmax(pred) == 0:
-                    st.success("BRAIN TUMOR NOT DETECTED")
-                else:
-                    st.error("BRAIN TUMOR DETECTED")
-            except Exception as e:
-                st.error(f"Error making prediction: {e}")
-
+    if login_button:
+        if authenticate(username, password):
+            st.success("Successfully Logged in as Admin")
+            st.session_state.logged_in = True
+            st.experimental_rerun()
+            if not st.session_state.logged_in:
+                st.error("Error: Login state not persisted. Please try again.")
+        else:
+            st.error("Invalid credentials. Please try again.")
     st.markdown(
-        """
-        <style>
-            body {
-                background: url('https://png.pngtree.com/background/20210710/original/pngtree-pink-medical-equipment-banner-background-picture-image_968645.jpg') no-repeat center center fixed;
-                background-size: cover;
-                opacity: 0.875;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+            """
+            <style>
+                body {
+                    background: url("https://png.pngtree.com/background/20210710/original/pngtree-blue-technology-wind-medical-banner-picture-image_1034506.jpg") no-repeat center center fixed;
+                    background-size: cover;
+                    opacity: 0.875;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
+
+
+def authenticate(username, password):
+    return username == "admin" and password == "admin"
+
+
+def main():
+    if not st.session_state.get('logged_in', False):
+        st.session_state.logged_in = login()
+
+    if st.session_state.logged_in:
+        st.title("Multiple Disease Prediction")
+
+        with st.sidebar:
+            selected = option_menu('Medical Image Classification',
+                                ['Malaria Detection', 'Pneumonia Detection', 'Brain Tumor Detection'],
+                                icons=['bug', 'lungs', 'clipboard-pulse'],
+                                default_index=0)
+
+        # Malaria Detection Interface
+        if selected == 'Malaria Detection':
+            uploaded_file = st.file_uploader("Choose a cell image...", type=["jpg", "jpeg", "png"])
+
+            if uploaded_file is not None:
+                image = Image.open(uploaded_file)
+                st.image(image, caption='Uploaded Image.', use_column_width=True)
+
+                try:
+                    pred = predict_image(image, 'Malaria')
+                    if pred[0][0] <= 0.5:
+                        st.error("INFECTED CELL")
+                    else:
+                        st.success("UNINFECTED CELL")
+                except Exception as e:
+                    st.error(f"Error making prediction: {e}")
+
+        # Pneumonia Detection Interface
+        elif selected == 'Pneumonia Detection':
+            uploaded_file = st.file_uploader("Choose an X-ray image...", type=["jpg", "jpeg", "png"])
+
+            if uploaded_file is not None:
+                image = Image.open(uploaded_file)
+                st.image(image, caption='Uploaded X-ray Image.', use_column_width=True)
+
+                try:
+                    pred = predict_image(image, 'Pneumonia')
+                    pneumonia_prob = pred[0][1]
+                    normal_prob = pred[0][0]
+
+                    if pneumonia_prob > normal_prob:
+                        st.error("PNEUMONIA DETECTED")
+                    else:
+                        st.success("PNEUMONIA NOT DETECTED")
+                except Exception as e:
+                    st.error(f"Error making prediction: {e}")
+
+        # Brain Tumor Detection Interface
+        elif selected == 'Brain Tumor Detection':
+            uploaded_file = st.file_uploader("Choose a brain MRI image...", type="jpg")
+
+            if uploaded_file is not None:
+                image = Image.open(uploaded_file)
+                st.image(image, caption='Uploaded Brain MRI Image.', use_column_width=True)
+
+                try:
+                    pred = predict_image(image, 'Brain Tumor')
+                    if np.argmax(pred) == 0:
+                        st.success("BRAIN TUMOR NOT DETECTED")
+                    else:
+                        st.error("BRAIN TUMOR DETECTED")
+                except Exception as e:
+                    st.error(f"Error making prediction: {e}")
+
+        st.markdown(
+            """
+            <style>
+                body {
+                    background: url('https://png.pngtree.com/background/20210710/original/pngtree-pink-medical-equipment-banner-background-picture-image_968645.jpg') no-repeat center center fixed;
+                    background-size: cover;
+                    opacity: 0.875;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
 
 if __name__ == '__main__':
