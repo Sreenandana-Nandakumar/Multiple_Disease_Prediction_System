@@ -10,7 +10,7 @@ This project offers a user-friendly interface for medical professionals to predi
 - Model Persistence: The trained deep learning models are loaded into the interface, allowing for quick and efficient predictions without the need for retraining.
 
 ### Technologies Used:
-Python
-Streamlit
-Keras (TensorFlow backend)
+Python<br>
+Streamlit<br>
+Keras (TensorFlow backend)<br>
 PIL (Python Imaging Library)
