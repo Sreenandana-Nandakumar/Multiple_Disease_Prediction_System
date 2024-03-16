@@ -14,3 +14,14 @@ This project offers a user-friendly interface for medical professionals to predi
 - Streamlit
 - Keras (TensorFlow backend)
 - PIL (Python Imaging Library)
+
+### Installation and Usage:
+- Clone the repository:
+  ``` git clone https://github.com/Sreenandana-Nandakumar/Multiple_Disease_Prediction_System/ ```
+- Running the application:
+  ``` streamlit run app.py ```
+- Navigate to the provided local URL in your web browser.
+- Log in using your credentials (default: username - admin, password - admin).
+- Select the type of medical image prediction from the sidebar.
+- Upload the corresponding medical image (cell image for malaria, X-ray for pneumonia, MRI image for brain tumor).
+- View the prediction result displayed on the interface.
