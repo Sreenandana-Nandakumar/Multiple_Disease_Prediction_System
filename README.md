@@ -1,6 +1,6 @@
 # Multiple_Disease_Prediction_System
 
-This project offers a user-friendly interface for medical professionals to predict diseases such as pneumonia, malaria, and brain tumors using medical images. The interface allows users to upload images of cells, X-rays, or MRI scans, and the system employs deep learning models to analyze these images and provide predictions on the presence or absence of diseases.
+This project presents a user-friendly interface tailored for medical professionals to forecast diseases like pneumonia, malaria, and brain tumors utilizing medical images. The interface enables users to effortlessly upload images of cells, X-rays, or MRI scans. Subsequently, the system harnesses deep learning models to scrutinize these images, furnishing predictions regarding the existence or non-existence of diseases.
 
 ### Features:
 - Multi-disease Prediction: The interface supports the prediction of three diseases: malaria, pneumonia, and brain tumors, each with its own specialized deep learning model.
